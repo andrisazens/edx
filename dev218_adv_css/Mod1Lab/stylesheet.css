@@ -94,6 +94,13 @@ Layout Styles
     }
 }
 
+@media only screen and (max-width : 47.9375em) {
+    .remove-gutter-xs {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+}
+
 /***************************
 ****************************
 Module Styles
