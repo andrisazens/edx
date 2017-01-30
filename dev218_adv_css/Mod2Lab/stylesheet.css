@@ -116,18 +116,28 @@ Modules
   font-weight: bold;
   border-radius: 4px;
 
-  transition: all 0.3s ease 0s;
+  transition: all 0.3s ease 0s;  
 }
 
 .btn-nav {
-  color: white;
-
+  color: white;  
 }
 
 .btn-primary {
   background: #8DC63F;
   border-color: #8DC63F;
   color: white;
+}
+
+@media (min-width: 48em) {
+  .btn-primary {
+    font-size: 1.125em;
+    padding: 10px 15px;
+  }
+
+  .btn-nav:hover {
+    border: 1px solid #fff;
+  }
 }
 
 .btn-primary:hover{
