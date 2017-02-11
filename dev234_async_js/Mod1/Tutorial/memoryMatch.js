@@ -1,11 +1,32 @@
 //global variables go here:
-
+var clickedArray = [];
+var interval;
+var started = false;
+var time = 0;
 
 //execute functions here:
 setUp();
 
 
 //function definitions go here:
+
+function reveal(cell) {
+    cell.style.backgroundColor = "red";
+    cell.innerHTML = cell.value;
+    cell.clicked = true;
+}
+
+function startTimer() {
+    if (started == false) {
+        document.getElementById("timer").innerHTML = "Time Elapsed: " + time;
+        
+        interval = setInterval(function () {
+            time++;
+            document.getElementById("timer").innerHTML = "Time Elapsed: " + time;
+        }, 1000);
+        started = true;
+    }
+}
 
 function randomAnswers() {
     var answers = [1, 1, 2, 2, 3, 3, 4, 4, 5];
@@ -36,36 +57,11 @@ function setUp() {
         });
 
         cell.addEventListener("click", function () {
-            if (this.isCompleted) {
-                return;
-            }
+            startTimer();
 
-            // find if theres any other match
-            var grid = document.getElementsByTagName("td");
-            for (var i = 0; i < grid.length; i++) {
-                var cell = grid[i], otherClickedCell;
-                if (cell.isClicked) {
-                    otherClickedCell = cell;
-                }
-            };
-
-            console.log(otherClickedCell);
-
-            if (!otherClickedCell) { // not other cell clicked
-                this.style.background = "red";
-                this.innerText = this.value;
-                this.clicked = true;
-            } else {
-                if (otherClickedCell.value == this.value) { // matches the value
-                    otherClickedCell.isCompleted = true;
-                    otherClickedCell.style.background = "purple";
-                    this.isCompleted = true;
-                    this.style.background = "purple";
-                    this.innerText = this.value;
-                } else {
-                    otherClickedCell.isClicked = false;
-                    otherClickedCell.style.background = "blue";
-                }
+            if (this.completed == false && this.clicked == false) {
+                clickedArray.push(this);
+                reveal(this);
             }
         });
     }
