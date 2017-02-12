@@ -20,6 +20,7 @@ function checkIfCompleted(cell) {
     if (clickedArray[0].value == cell.value) {
         clickedArray[0].style.background = "purple";
         cell.style.background = "purple";
+        console.log(cell);
     } else {
         setTimeout(function () {
             hideCell(clickedArray[0]);
@@ -81,10 +82,10 @@ function setUp() {
             if (this.completed == false && this.clicked == false) {
                 if (clickedArray.length > 0) {
                     checkIfCompleted(this);
-                }
-
-                clickedArray.push(this);
-                reveal(this);
+                } else {
+                    clickedArray.push(this);
+                    reveal(this);
+                }                
             }
         });
     }
