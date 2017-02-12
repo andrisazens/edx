@@ -1,5 +1,6 @@
 //global variables go here:
 var clickedArray = [];
+var matchingPairCount = 0;
 var interval;
 var started = false;
 var time = 0;
@@ -16,18 +17,47 @@ function reveal(cell) {
     cell.clicked = true;
 }
 
+function complete(cell) {
+    cell.style.backgroundColor = "purple";    
+    cell.completed = true;
+}
+
 function checkIfCompleted(cell) {
-    if (clickedArray[0].value == cell.value) {
-        clickedArray[0].style.background = "purple";
-        cell.style.background = "purple";
-        console.log(cell);
+    reveal(cell);
+
+    if (clickedArray[0].value == cell.value) {        
+        complete(clickedArray[0]);
+        complete(cell);
+        clickedArray = [];
+
+        matchingPairCount++;
+        if (matchingPairCount >= 4) {
+            endGame();
+        }
     } else {
+        let table = document.getElementById("gridTable");
+        console.log(table);
+        table.style.borderColor = "red";
+
         setTimeout(function () {
             hideCell(clickedArray[0]);
             hideCell(cell);
             clickedArray = [];
+
+            table.style.borderColor = "black";
         }, 500);
     }
+}
+
+function endGame() {
+    alert("You won in " + time + " seconds")
+    restartGame();
+}
+
+function restartGame() {
+    started = false;
+    time = 0;
+    clearInterval(interval);
 }
 
 function hideCell(cell) {
@@ -85,7 +115,7 @@ function setUp() {
                 } else {
                     clickedArray.push(this);
                     reveal(this);
-                }                
+                }
             }
         });
     }
