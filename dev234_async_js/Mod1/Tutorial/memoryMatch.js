@@ -16,10 +16,29 @@ function reveal(cell) {
     cell.clicked = true;
 }
 
+function checkIfCompleted(cell) {
+    if (clickedArray[0].value == cell.value) {
+        clickedArray[0].style.background = "purple";
+        cell.style.background = "purple";
+    } else {
+        setTimeout(function () {
+            hideCell(clickedArray[0]);
+            hideCell(cell);
+            clickedArray = [];
+        }, 500);
+    }
+}
+
+function hideCell(cell) {
+    cell.style.backgroundColor = "blue";
+    cell.innerHTML = "";
+    cell.clicked = false;
+}
+
 function startTimer() {
     if (started == false) {
         document.getElementById("timer").innerHTML = "Time Elapsed: " + time;
-        
+
         interval = setInterval(function () {
             time++;
             document.getElementById("timer").innerHTML = "Time Elapsed: " + time;
@@ -60,6 +79,10 @@ function setUp() {
             startTimer();
 
             if (this.completed == false && this.clicked == false) {
+                if (clickedArray.length > 0) {
+                    checkIfCompleted(this);
+                }
+
                 clickedArray.push(this);
                 reveal(this);
             }
