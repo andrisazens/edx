@@ -8,6 +8,10 @@ var time = 0;
 //execute functions here:
 setUp();
 
+var restartBtn = document.getElementById("restart");
+restartBtn.addEventListener("click", function () {
+    location.reload();
+});
 
 //function definitions go here:
 
@@ -18,14 +22,14 @@ function reveal(cell) {
 }
 
 function complete(cell) {
-    cell.style.backgroundColor = "purple";    
+    cell.style.backgroundColor = "purple";
     cell.completed = true;
 }
 
 function checkIfCompleted(cell) {
     reveal(cell);
 
-    if (clickedArray[0].value == cell.value) {        
+    if (clickedArray[0].value == cell.value) {
         complete(clickedArray[0]);
         complete(cell);
         clickedArray = [];
@@ -89,6 +93,12 @@ function randomAnswers() {
 function setUp() {
     var grid = document.getElementsByTagName("td");
     var answers = randomAnswers();
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key > 0 && event.key < 10) {
+            grid[event.key - 1].click();
+        }
+    });
 
     for (var i = 0; i < grid.length; i++) {
         var cell = grid[i];
