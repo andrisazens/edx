@@ -1,5 +1,5 @@
 
-let refreshIntervalInMs = 100;
+let refreshIntervalInMs = 10;
 let interval, started = false, time = 0;
 
 setup();
@@ -47,7 +47,7 @@ function recordTimes() {
     let recordedTimesList = document.getElementById("recordedTimesList"),
         recordedTime = document.createElement("div");
 
-    recordedTime.innerHTML = time / 10;
+    recordedTime.innerHTML = formatTime();
     recordedTimesList.appendChild(recordedTime);
 }
 
@@ -57,7 +57,7 @@ function startTimer() {
     if (started == false) {
         interval = setInterval(function () {
             time++;
-            stopWatchTime.innerHTML = time / 10;
+            stopWatchTime.innerHTML = formatTime();
         }, refreshIntervalInMs);
 
         started = true;
@@ -74,4 +74,8 @@ function resetTimer() {
     time = 0;
     document.getElementById("stopWatchTime").innerHTML = "0";
     document.getElementById("recordedTimesList").innerHTML = "";
+}
+
+function formatTime(){
+    return time / 100;
 }
