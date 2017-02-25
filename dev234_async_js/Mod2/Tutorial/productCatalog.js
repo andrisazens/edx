@@ -1,8 +1,42 @@
 
+document.getElementById("inputButton").addEventListener('click', function () {
+    processSearch(document.getElementById('input').value);
+});
 
 api.searchAllProducts().then(function (value) {
     updateTable('allTable', value);
 });
+
+function updateExaminedText(product) {
+    let productString = "Product Id: " + product.id + "<br>Price: " + product.price + "<br>Type: " + product.type;
+    document.getElementById("productText").innerHTML = productString;
+}
+
+function getIntersection(samePriceArray, sameTypeArray, searchedForId) {
+    let similarArray = [];
+
+    for (let priceItem in samePriceArray) {
+        for (let typeItem in sameTypeArray) {
+            if (priceItem.id == typeItem.id && priceItem.id != searchedForId) {
+                similarArray.push(product);
+            }
+        }
+    }
+
+    return similarArray;
+}
+
+function processSearch(searchId) {
+    api.searchProductById(searchId).then(function (product) {
+        return Promise.all([api.searchProductsByPrice(product.price, 50), api.searchProductsByType(product.type), product]);
+    }).then(function (res) {
+        var similarArray = getIntersection(res[0], res[1], res[2].id);
+        updateExaminedText(res[2]);
+        updateTable('similarTable', similarArray);
+    }).catch(function (ex) {
+        alert(ex);
+    });
+}
 
 function createTableHeader(tableId) {
     var tableHeaderRow = document.createElement('TR');
@@ -38,7 +72,7 @@ function updateTable(tableId, productArray) {
         var td4 = document.createElement('button');
 
         td4.addEventListener('click', function () {
-
+            processSearch(this.parentNode.firstChild.innerHTML);
         });
         td1.appendChild(document.createTextNode(productArray[i].id));
         td2.appendChild(document.createTextNode(productArray[i].type));

@@ -24,7 +24,7 @@
                     var i = 0, products = [];
                     setTimeout(function () {
                         while (i < catalog.length) {
-                            if (Math.abs(catalog[i].price - price) < difference) {
+                            if (Math.abs(catalog[i].price - price) < diff) {
                                 products.push(mapProduct(catalog[i]));
                             }
                             i++;
