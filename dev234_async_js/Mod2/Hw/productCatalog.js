@@ -3,17 +3,44 @@ document.getElementById("typeInputButton").addEventListener('click', function ()
     searchByType(document.getElementById('typeInput').value);
 });
 
+document.getElementById("priceInputButton").addEventListener('click', function () {
+    searchByPrice(document.getElementById('priceInput').value);
+});
+
 document.getElementById("inputButton").addEventListener('click', function () {
-    processSearch(document.getElementById('input').value);
+    searchById(document.getElementById('input').value);
 });
 
 api.searchAllProducts().then(function (value) {
     updateTable('allTable', value);
 });
 
-function updateExaminedText(product) {
-    let productString = "Product Id: " + product.id + "<br>Price: " + product.price + "<br>Type: " + product.type;
-    document.getElementById("productText").innerHTML = productString;
+function searchByType(type) {
+    api.searchProductsByType(type).then(function (products) {
+        updateTable('similarTable', products);
+    }).catch(function (ex) {
+        alert(ex);
+    });
+}
+
+function searchByPrice(price) {
+    api.searchProductsByPrice(price, 50).then(function (products) {
+        updateTable('similarTable', products);
+    }).catch(function (ex) {
+        alert(ex);
+    });
+}
+
+function searchById(searchId) {
+    api.searchProductById(searchId).then(function (product) {
+        return Promise.all([api.searchProductsByPrice(product.price, 50), api.searchProductsByType(product.type), product]);
+    }).then(function (res) {
+        var similarArray = getIntersection(res[0], res[1], res[2].id);
+        updateExaminedText(res[2]);
+        updateTable('similarTable', similarArray);
+    }).catch(function (ex) {
+        alert(ex);
+    });
 }
 
 function getIntersection(samePriceArray, sameTypeArray, searchedForId) {
@@ -30,16 +57,9 @@ function getIntersection(samePriceArray, sameTypeArray, searchedForId) {
     return similarArray;
 }
 
-function processSearch(searchId) {
-    api.searchProductById(searchId).then(function (product) {        
-        return Promise.all([api.searchProductsByPrice(product.price, 50), api.searchProductsByType(product.type), product]);
-    }).then(function (res) {
-        var similarArray = getIntersection(res[0], res[1], res[2].id);        
-        updateExaminedText(res[2]);
-        updateTable('similarTable', similarArray);
-    }).catch(function (ex) {        
-        alert(ex);
-    });
+function updateExaminedText(product) {
+    let productString = "Product Id: " + product.id + "<br>Price: " + product.price + "<br>Type: " + product.type;
+    document.getElementById("productText").innerHTML = productString;
 }
 
 function createTableHeader(tableId) {
@@ -76,7 +96,7 @@ function updateTable(tableId, productArray) {
         var td4 = document.createElement('button');
 
         td4.addEventListener('click', function () {
-            processSearch(this.parentNode.firstChild.innerHTML);
+            searchById(this.parentNode.firstChild.innerHTML);
         });
         td1.appendChild(document.createTextNode(productArray[i].id));
         td2.appendChild(document.createTextNode(productArray[i].type));
