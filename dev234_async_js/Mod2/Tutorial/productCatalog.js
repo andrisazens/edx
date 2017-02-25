@@ -15,10 +15,10 @@ function updateExaminedText(product) {
 function getIntersection(samePriceArray, sameTypeArray, searchedForId) {
     let similarArray = [];
 
-    for (let priceItem in samePriceArray) {
-        for (let typeItem in sameTypeArray) {
+    for (let priceItem of samePriceArray) {
+        for (let typeItem of sameTypeArray) {
             if (priceItem.id == typeItem.id && priceItem.id != searchedForId) {
-                similarArray.push(product);
+                similarArray.push(priceItem);
             }
         }
     }
@@ -27,13 +27,13 @@ function getIntersection(samePriceArray, sameTypeArray, searchedForId) {
 }
 
 function processSearch(searchId) {
-    api.searchProductById(searchId).then(function (product) {
+    api.searchProductById(searchId).then(function (product) {\        
         return Promise.all([api.searchProductsByPrice(product.price, 50), api.searchProductsByType(product.type), product]);
     }).then(function (res) {
-        var similarArray = getIntersection(res[0], res[1], res[2].id);
+        var similarArray = getIntersection(res[0], res[1], res[2].id);        
         updateExaminedText(res[2]);
         updateTable('similarTable', similarArray);
-    }).catch(function (ex) {
+    }).catch(function (ex) {        
         alert(ex);
     });
 }
