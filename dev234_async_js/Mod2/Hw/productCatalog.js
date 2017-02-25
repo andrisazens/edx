@@ -1,4 +1,8 @@
 
+document.getElementById("typeInputButton").addEventListener('click', function () {
+    searchByType(document.getElementById('typeInput').value);
+});
+
 document.getElementById("inputButton").addEventListener('click', function () {
     processSearch(document.getElementById('input').value);
 });
@@ -27,7 +31,7 @@ function getIntersection(samePriceArray, sameTypeArray, searchedForId) {
 }
 
 function processSearch(searchId) {
-    api.searchProductById(searchId).then(function (product) {\        
+    api.searchProductById(searchId).then(function (product) {        
         return Promise.all([api.searchProductsByPrice(product.price, 50), api.searchProductsByType(product.type), product]);
     }).then(function (res) {
         var similarArray = getIntersection(res[0], res[1], res[2].id);        
