@@ -1,6 +1,8 @@
 document.getElementById("analyseButton").addEventListener("click", analyze);
 
 function analyze() {
+    let outputElem = document.getElementById("output");
+
     fetch(createRequest()).then(function (response) {
         if (response.ok) {
             return response.json();
@@ -10,10 +12,25 @@ function analyze() {
         }
     }).then(function (response) {
         console.log(response);
-        document.getElementById("output").innerHTML = "";
+
+        let attrResult = "";
+        if (response && response[0]) {
+            let faceAttributes = response[0] && response[0].faceAttributes;
+            attrResult = "Age: " + (faceAttributes.age || 0) + "</br>Gender: " + (faceAttributes.gender || 0);
+        } else {
+            attrResult = "No Faces Detected";
+        }
+        document.getElementById("attributesOutput").innerHTML = attrResult;        
+
+        let img = document.createElement('IMG');
+        img.src = document.getElementById("input").value;        
+        if (outputElem.hasChildNodes()) {
+            outputElem.removeChild(outputElem.firstChild);
+        }
+        outputElem.appendChild(img);
     }).catch(function (err) {
         alert(err);
-        document.getElementById("output").innerHTML = "";
+        outputElem.innerHTML = "";
     });
 }
 
@@ -31,5 +48,5 @@ function createRequest() {
         headers: myHeader
     }
 
-    return new Request('https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceAttributes=age,gender', initObject);    
+    return new Request('https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceAttributes=age,gender', initObject);
 }
