@@ -15,20 +15,26 @@ function load() {
 
 function* gen() {
     //check if input is valid
+    let starshipIds = [2, 75, 74, 65, 3, 59, 58, 63, 28, 29, 39, 10],
+        starships1Select = document.getElementById("starshipSelect1"),
+        starships2Select = document.getElementById("starshipSelect2");
 
-    // fetch the starships
-    var starshipsResponse = yield fetch("http://swapi.co/api/starships");
-    var starships = yield starshipsResponse.json();
-    console.log(starships);
+    for (let id of starshipIds) {
+        // fetch the starships
+        var starshipResponse = yield fetch("http://swapi.co/api/starships/" + id);
+        var starship = yield starshipResponse.json();
+        console.log(starship);
 
-    // populate the select's    
-    let starships1Select = document.getElementById("starshipSelect1"), starships2Select = document.getElementById("starshipSelect2");
-    for (let starship of starships) {
+        // populate the select's            
         let elem = document.createElement("option");
         elem.value = starship.name;
         elem.innerText = starship.name;
         starships1Select.appendChild(elem);
-        starships2Select.appendChild(elem);
+        
+        let elem2 = document.createElement("option");
+        elem2.value = starship.name;
+        elem2.innerText = starship.name;
+        starships2Select.appendChild(elem2);
     }
 }
 
