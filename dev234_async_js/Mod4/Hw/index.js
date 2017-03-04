@@ -1,34 +1,35 @@
 
+
 document.getElementById("button").addEventListener('click', function () {
+    // run(gen).catch(function (err) {
+    //     alert(err.message);
+    // });
+});
+load();
+
+function load() {
     run(gen).catch(function (err) {
         alert(err.message);
     });
-});
+}
 
 function* gen() {
     //check if input is valid
-    if (document.getElementById("input").value > 7 || document.getElementById("input").value < 1) {
-        throw new Error("Invalid Input - Enter a number between 1 and 7");
+
+    // fetch the starships
+    var starshipsResponse = yield fetch("http://swapi.co/api/starships");
+    var starships = yield starshipsResponse.json();
+    console.log(starships);
+
+    // populate the select's    
+    let starships1Select = document.getElementById("starshipSelect1"), starships2Select = document.getElementById("starshipSelect2");
+    for (let starship of starships) {
+        let elem = document.createElement("option");
+        elem.value = starship.name;
+        elem.innerText = starship.name;
+        starships1Select.appendChild(elem);
+        starships2Select.appendChild(elem);
     }
-
-    //fetch the film    
-    var filmResponse = yield fetch("http://swapi.co/api/films/" + document.getElementById("input").value);
-    var film = yield filmResponse.json();
-
-    console.log(film);
-
-    //fetch the characters
-    var characters = film.characters;
-    var characterString = "Characters: <br>";
-    for (let i = 0; i < characters.length; i++) {
-        var tempCharacterResponse = yield fetch(characters[i]);
-        var tempCharacter = yield tempCharacterResponse.json();
-        characterString += tempCharacter.name + "<br>";
-    }
-
-    //display film title and characters in the film
-    document.getElementById("filmsText").innerHTML = "Film: <br>" + film.title;
-    document.getElementById("peopleText").innerHTML = characterString;
 }
 
 function run(genFunc) {
