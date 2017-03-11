@@ -35,7 +35,7 @@ describe('dbInterface', function() {
    *  single document.
    */
   it('can query data by director', function(done) {
-    dbInterface.byDirector(db, 'Irvin Kershner', function(error, docs) {
+    dbInterface.byDirector(db, 'Irvin Kershner', function(error, docs) {      
       assert.ifError(error);
       assert.ok(Array.isArray(docs));
       assert.equal(docs.length, 1);
