@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var schema = new mongoose.Schema({
-  name: { type: String, required: true },
+  name: { type: String, required: true },  
   courses: [{ type: String, ref: 'Course' }]
 });
 
@@ -9,14 +9,14 @@ var schema = new mongoose.Schema({
  * to be everything up to the first space in the student's name.
  * For instance, "William Bruce Bailey" -> "William" */
 schema.virtual('firstName').get(function() {
-  return 'Not Implemented!';
+  return this.name.slice(0, this.name.indexOf(" "));
 });
 
 /* Returns the student's last name, which we will define
  * to be everything after the last space in the student's name.
  * For instance, "William Bruce Bailey" -> "Bailey" */
-schema.virtual('lastName').get(function() {
-  return 'Not Implemented!';
+schema.virtual('lastName').get(function() {  
+  return this.name.slice(this.name.lastIndexOf(" ") + 1);  
 });
 
 module.exports = schema;
