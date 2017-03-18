@@ -21,4 +21,13 @@ describe('server', function() {
       done();
     });
   });
+
+  it('prints out user with option test when go to /user?options=1', function(done) {
+    superagent.get('http://localhost:3000/user/john?option=1', function(error, res) {
+      assert.ifError(error);
+      assert.equal(res.status, 200);      
+      assert.equal(res.text, "Page for user john with option 1");
+      done();
+    });
+  });
 });
